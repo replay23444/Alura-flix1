@@ -1,57 +1,81 @@
-let campoIdade;
-let campoRockPesado; // Campo para rock pesado
-let campoSeriesAcao; // Campo para séries de ação
+// Array para armazenar as URLs dos filmes
+let listaFilmes = [];
 
-function setup() {
-  createCanvas(800, 400);
-  createElement("h2", "Recomendador de conteúdo"); // Título abrangente
-  createSpan("Sua idade:");
-  campoIdade = createInput("16"); // Idade padrão já mais alta, pensando nas novas recomendações
-  campoRockPesado = createCheckbox("Gosta de rock pesado (Skillet)?"); // Checkbox para Skillet
-  campoSeriesAcao = createCheckbox("Gosta de séries de ação (Invencível/TWD)?"); // Checkbox para Invencível/TWD
-}
+// Função para adicionar um filme
+function adicionarFilme() {
+    const filmeInput = document.getElementById('filme');
+    const urlFilme = filmeInput.value;
 
-function draw() {
-  background("white");
-  let idade = campoIdade.value();
-  let gostaDeRockPesado = campoRockPesado.checked();
-  let gostaDeSeriesAcao = campoSeriesAcao.checked();
+    // Expressão regular para verificar se a URL termina com uma extensão de imagem comum
+    const isImage = /\.(jpeg|jpg|gif|png|webp|bmp)$/i;
 
-  let recomendacao = geraRecomendacao(idade, gostaDeRockPesado, gostaDeSeriesAcao);
-
-  fill(color(76, 0, 115));
-  textAlign(CENTER, CENTER);
-  textSize(32);
-  text(recomendacao, width / 2, height / 2);
-}
-
-function geraRecomendacao(idade, gostaDeRockPesado, gostaDeSeriesAcao) {
-  // Converte a idade para número inteiro
-  idade = parseInt(idade);
-
-  // Lógica principal: foca nas novas recomendações
-  if (gostaDeSeriesAcao) {
-    if (idade >= 16) { // Apenas para idade apropriada
-      return "Para séries de ação/suspense, assista: The Walking Dead ou Invencível!";
-    } else {
-      return "The Walking Dead e Invencível são para maiores de 16. Que tal algo mais leve?";
+    if (urlFilme.trim() === '') {
+        alert("Por favor, insira uma URL de imagem.");
+        return;
     }
-  }
 
-  if (gostaDeRockPesado) {
-    if (idade >= 10) { // Skillet pode ser apreciado por um público um pouco mais jovem
-        return "Para rock pesado, ouça a banda Skillet!";
-    } else {
-        return "Skillet é uma banda mais intensa. Que tal explorar outros gêneros?";
+    if (!isImage.test(urlFilme)) {
+        alert("A URL inserida não parece ser uma imagem válida. Por favor, use URLs que terminem em .jpg, .png, .gif, etc.");
+        return;
     }
-  }
 
-  // Se nenhuma das opções acima for marcada ou a idade não for compatível
-  if (idade >= 16) {
-    return "Que tal explorar séries de ação ou bandas de rock pesado?";
-  } else if (idade >= 10) {
-    return "Descubra novas bandas ou séries de acordo com seu gosto!";
-  } else {
-    return "Divirta-se com o que você já gosta!";
-  }
+    // Verifica se a URL já foi adicionada para evitar duplicatas
+    if (listaFilmes.includes(urlFilme)) {
+        alert("Este filme já foi adicionado!");
+        filmeInput.value = ''; // Limpa o campo
+        return;
+    }
+
+    // Adiciona a URL à lista
+    listaFilmes.push(urlFilme);
+
+    // Chama a função para exibir os filmes atualizados
+    exibirFilmes();
+
+    // Limpa o campo de input
+    filmeInput.value = '';
 }
+
+// Função para exibir os filmes na tela
+function exibirFilmes() {
+    const divListaFilmes = document.getElementById('listaFilmes');
+    divListaFilmes.innerHTML = ''; // Limpa a lista antes de redesenhar
+
+    listaFilmes.forEach(url => {
+        const filmeElemento = document.createElement('div');
+        filmeElemento.classList.add('filme-item');
+
+        const imagemElemento = document.createElement('img');
+        imagemElemento.src = url;
+        imagemElemento.alt = "Capa do Filme";
+
+        // Adiciona um listener para erros de carregamento da imagem
+        imagemElemento.onerror = function() {
+            console.error("Erro ao carregar imagem:", url);
+            // Pode adicionar uma imagem de placeholder ou remover o elemento
+            imagemElemento.src = "https://via.placeholder.com/180x270?text=Imagem+nao+disponivel"; // Imagem de placeholder
+        };
+
+        // Extrai um título simples da URL (opcional, mas útil)
+        const titulo = url.substring(url.lastIndexOf('/') + 1).split('.')[0].replace(/[-_]/g, ' ');
+        const tituloElemento = document.createElement('div');
+        tituloElemento.classList.add('filme-titulo');
+        tituloElemento.textContent = titulo;
+
+        filmeElemento.appendChild(imagemElemento);
+        filmeElemento.appendChild(tituloElemento); // Adiciona o título
+        divListaFilmes.appendChild(filmeElemento);
+    });
+}
+
+// Opcional: Adicionar alguns filmes de exemplo ao carregar a página
+document.addEventListener('DOMContentLoaded', () => {
+    // Exemplo de filmes para teste
+    listaFilmes.push("https://m.media-amazon.com/images/I/71c05l-I-BL._AC_UF894,1000_QL80_.jpg");
+    listaFilmes.push("https://m.media-amazon.com/images/I/81F5PF311CL._AC_UF894,1000_QL80_.jpg");
+    listaFilmes.push("https://upload.wikimedia.org/wikipedia/pt/2/20/The_Batman_poster.jpg");
+    listaFilmes.push("https://br.web.img3.acsta.net/pictures/21/04/28/17/04/1090473.jpg"); // Duna
+    listaFilmes.push("https://br.web.img3.acsta.net/pictures/19/07/04/16/22/0831034.jpg"); // O Rei Leão
+
+    exibirFilmes();
+});
