@@ -1,69 +1,188 @@
 body {
-    color: white;
-    background: black;
-    margin: 0px;
-    font-family: "Chakra Petch", sans-serif;
-    margin-bottom: 100px;
-}html, body {
-  margin: 30px;
-  padding: 0;
-  background-color: rgb(221,233,251);
+    font-family: 'Roboto', sans-serif;
+    background-color: #000; /* Fundo preto para o estilo Alura Flix */
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background-image: url('https://www.alura.com.br/assets/img/imersoes/dev-2021/background-aluraflix.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh; /* Garante que o fundo cubra toda a altura */
+    display: flex;
+    flex-direction: column;
 }
 
-canvas {
-  display: block;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
 }
-
 
 header {
-    border-bottom: solid 2px rgb(42, 122, 228);
-    padding: 20px;
-    font-size: 32px;
-    color: rgb(42, 122, 228);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
 
-.chamada {
-    background: rgb(184, 156, 213);
-    padding-bottom: 80px;
-    padding-top: 80px;
+.page-title {
+    color: #e50914; /* Vermelho Netflix/Alura Flix */
+    margin: 0;
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.page-logo {
+    width: 200px;
+    margin-top: 20px;
+}
+
+.page-description {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.form-wrapper {
     display: flex;
     justify-content: center;
-}
-
-.chamada-texto {
-    margin-right: 5%;
-}
-
-h1 {
-    font-size: 40px;
-}
-
-p {
-    font-size: 20px;
-}
-
-.categoria-videos {
-    display: flex;
-    overflow-x: auto;
     gap: 10px;
+    margin-bottom: 40px;
+    flex-wrap: wrap; /* Permite que os elementos quebrem a linha em telas menores */
 }
 
-.categoria {
-    padding-left: 20px;
-    padding-right: 20px;
-    margin-top: 50px;
+.form-wrapper input {
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: #1a1a1a;
+    color: #fff;
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box; /* Garante que o padding não aumente a largura total */
 }
 
-.categoria-videos img {
-    opacity: 0.5;
-    height: 200px;
+.form-wrapper button {
+    background-color: #e50914;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
 }
 
-.categoria-videos img:hover {
-    opacity: 1.0;
-    border: 3px solid green;
+.form-wrapper button:hover {
+    background-color: #ff0000;
 }
 
-.categoria h2 {
-    color: rgb(42, 122, 228);
+.lista-filmes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+.filme-item {
+    width: 180px; /* Largura fixa para os cards dos filmes */
+    height: 270px; /* Altura fixa para os cards dos filmes */
+    overflow: hidden; /* Garante que a imagem não transborde */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #1a1a1a; /* Fundo para o card, caso a imagem não carregue */
+    position: relative;
+}
+
+.filme-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.filme-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Garante que a imagem preencha o espaço sem distorcer */
+    border-radius: 8px;
+}
+
+.filme-item .filme-titulo {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 5px;
+    font-size: 0.9em;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adiciona "..." se o título for muito longo */
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+footer {
+    padding: 20px;
+    margin-top: auto; /* Empurra o footer para o final da página */
+}
+
+.alura-logo {
+    width: 80px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.alura-logo:hover {
+    opacity: 1;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 2.5em;
+    }
+
+    .page-logo {
+        width: 150px;
+    }
+
+    .form-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-wrapper input {
+        max-width: 90%;
+    }
+
+    .lista-filmes {
+        gap: 15px;
+    }
+
+    .filme-item {
+        width: 150px;
+        height: 225px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 2em;
+    }
+
+    .page-logo {
+        width: 120px;
+    }
+
+    .form-wrapper input, .form-wrapper button {
+        width: 90%;
+    }
 }
